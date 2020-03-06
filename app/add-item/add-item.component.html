@@ -1,0 +1,34 @@
+<div class = 'Inputs'>
+<mat-form-field appearance="fill" color='primary'>
+  <mat-label>Item Name</mat-label>
+  <input [(ngModel)]="newItem.name" matInput placeholder="Type here...">
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Item Category</mat-label>
+  <mat-select value="All" [(ngModel)]="newItem.category">
+    <mat-placeholder class="selectPlaceholder">Select Category</mat-placeholder>
+    <mat-option *ngFor="let propName of categories"
+                [value]="propName">{{propName|titlecase}}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Item Price</mat-label>
+  <input [(ngModel)] = "newItem.price" matInput placeholder="Type here...">
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Item count</mat-label>
+  <input [(ngModel)]="newItem.count" matInput placeholder="Type here...">
+</mat-form-field>
+</div>
+
+<div class = 'InputsActions'>
+  <button mat-button (click)="onAddButton()">Add Item</button>
+  <button mat-button (click)="onResetField()">Reset Fields</button>
+  <button mat-button (click)="visualisateModel()">Visualistae</button>
+
+</div>
+
+
