@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import Demo from '../../Models/demo';
 
 @Component({
   selector: 'app-content-box',
@@ -10,6 +11,7 @@ export class ContentBoxComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(Demo());
   }
 
 }
