@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ServerWorkerService} from '../../Services/server-worker.service';
 import {MatTable} from '@angular/material';
 import {TableDBHandlerService} from '../../Services/table-dbhandler.service';
@@ -12,6 +12,7 @@ import {Subscription} from 'rxjs';
 })
 export class ItemsTableComponent implements OnInit, OnDestroy {
 
+  deletables: { checked: boolean, id: number }[] = [];
   displayedColumns: string[] = ['id', 'name', 'category', 'price', 'count', 'date'];
   dataSource = [];
   loading = true;
@@ -22,37 +23,24 @@ export class ItemsTableComponent implements OnInit, OnDestroy {
   constructor(private itemsService: ServerWorkerService, private modelService: TableDBHandlerService) {
   }
 
-  onSelectionChange(value: string) {
-    this.sortBy(value);
+  checkaction(id: string) {
+    this.deletables.forEach((x) => {
+      if (x.id === Number(id)) {
+        x.checked = !x.checked;
+      }
+    });
+
+
   }
 
-
-  sortBy(type: string) {
-    if (type === 'price' || type === 'count' || type === 'id') {
-      this.dataSource.sort((a, b) => {
-        return a[type] - b[type];
-      });
-    } else {
-      this.dataSource.sort((a, b) => {
-        if (a[type] > b[type]) {
-          return 1;
-        }
-        if (b[type] > a[type]) {
-          return -1;
-        }
-        return 0;
-      });
-    }
-
-    this.table.renderRows();
-
-  }
 
   ngOnInit() {
 
     this.subscriptions$.push(this.modelService.getModelItems$().subscribe((items) => {
       this.dataSource = items;
       this.loading = false;
+      items.forEach(item => this.deletables.push({checked: false, id: item.Id}));
+      this.deletables.shift();
     }));
   }
 

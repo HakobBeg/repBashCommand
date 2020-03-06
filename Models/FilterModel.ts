@@ -1,6 +1,21 @@
 import {Item} from './ItemModel';
 
 
+export function inorderTraverse(current: Node, list) {
+
+  if (current.Left === null) {
+    list = list.filter((item) => {
+        return current.expression.result(item);
+      }
+    );
+    return list;
+  }
+
+  return current.method(inorderTraverse(current.Left, list), inorderTraverse(current.Right, list));
+
+
+}
+
 // standart, simple Node for BinaryTree
 
 export class Node {
@@ -62,8 +77,6 @@ export function cross(list1: Item[], list2: Item[]) {
 }
 
 
-
-
 // Expression class Implementation
 // Boolean expression stored as objects
 // -- linkedMethod(&,||)
@@ -95,7 +108,7 @@ export class GreaterThan extends BooleanExpression {
 export class SmallerThan extends BooleanExpression {
   constructor(lft: string, rght: number | string, linkMeth: object) {
     super(lft, rght, linkMeth, (element) => {
-      return element[this.leftOpProp]  < this.rightOp;
+      return element[this.leftOpProp] < this.rightOp;
     });
   }
 }
@@ -116,8 +129,33 @@ export class Equal extends BooleanExpression {
 export class FilerModelBuilder {
   expressions: BooleanExpression[] = [];
 
-  setExpression(exp: BooleanExpression) {
-    this.expressions.push(exp);
+  setExpression(leftOpProp, rightOp, method, expType) {
+
+    if (expType === 'g') {
+      this.expressions.push(new GreaterThan(leftOpProp, rightOp, method));
+    } else if (expType === 's') {
+      this.expressions.push(new SmallerThan(leftOpProp, rightOp, method));
+    } else if (expType === 'e') {
+      this.expressions.push(new Equal(leftOpProp, rightOp, method));
+    } else {
+      alert('False Expression Typre!');
+    }
+
+    return this;
+  }
+
+  setGreatherTHanExpression(leftOpProp, rightOp, method) {
+    this.expressions.push(new GreaterThan(leftOpProp, rightOp, method));
+    return this;
+  }
+
+  setSmallerThanExpression(leftOpProp, rightOp, method) {
+    this.expressions.push(new SmallerThan(leftOpProp, rightOp, method));
+    return this;
+  }
+
+  setEqualExpression(leftOpProp, rightOp, method) {
+    this.expressions.push(new Equal(leftOpProp, rightOp, method));
     return this;
   }
 
